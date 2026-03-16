@@ -2,6 +2,10 @@
 
 An interactive single-file HTML application for simulating room acoustics and designing algorithmic reverb using the Schroeder architecture.
 
+### [Launch App](https://brendanjameslynskey.github.io/Room_Acoustics_Reverb/)
+
+---
+
 ## Features
 
 ### Room Simulator (2D Ray Tracing)
@@ -50,19 +54,9 @@ An interactive single-file HTML application for simulating room acoustics and de
 - Store two different configurations (presets, room parameters, reverb settings)
 - Switch between A and B slots while audio is playing
 
-## Usage
-
-1. Open `index.html` in a modern browser (Chrome, Firefox, Edge)
-2. Click **INIT AUDIO** to start the Web Audio context
-3. Select a preset from the left panel or adjust room/reverb parameters on the right
-4. Click/drag the source (S) and listener (L) in the room view
-5. Select a test signal and click **PLAY** to hear the reverb
-6. Switch tabs to view the impulse response, energy decay curve, or signal flow diagram
-7. Click **ANIMATE RAYS** to see sound propagation in real time
-
 ## Technical Details
 
-- Single-file HTML (~1900 lines), no external dependencies beyond Google Fonts
+- Single-file HTML (~1900 lines)
 - Web Audio API: DelayNode + GainNode for comb and allpass filter implementation
 - HTML5 Canvas for room visualisation and IR/EDC plots
 - Inline SVG for signal flow diagram
