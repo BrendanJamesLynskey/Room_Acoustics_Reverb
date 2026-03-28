@@ -837,6 +837,7 @@ function selectSignal(sig, btn) {
 function playTestSignal() {
     if (!audioCtx) { initAudio(); }
     stopAudio();
+    audioCtx.resume();
     isPlaying = true;
     document.getElementById('btnPlay').classList.add('active');
 
@@ -910,6 +911,7 @@ function playTestSignal() {
 
 async function startMic() {
     try {
+        audioCtx.resume();
         micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         micSource = audioCtx.createMediaStreamSource(micStream);
         micSource.connect(dryGain);
@@ -935,6 +937,7 @@ function stopAudio() {
         micStream = null;
         micSource = null;
     }
+    if (audioCtx) audioCtx.suspend();
 }
 
 // ========== RAY TRACING ==========
