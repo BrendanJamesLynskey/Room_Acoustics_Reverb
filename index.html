@@ -275,6 +275,73 @@
         .split-h .canvas-wrap { flex:1; border-bottom:1px solid var(--panel-border); }
         .split-h .canvas-wrap:last-child { border-bottom:none; }
 
+        /* About tab */
+        .about-scroll {
+            flex:1;
+            overflow-y:auto;
+            padding:28px 36px;
+        }
+        .about-scroll::-webkit-scrollbar { width:4px; }
+        .about-scroll::-webkit-scrollbar-thumb { background:var(--accent-5); border-radius:2px; }
+        .about-grid {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:32px;
+            margin-bottom:32px;
+        }
+        .about-grid-3 {
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr;
+            gap:24px;
+            margin-bottom:32px;
+        }
+        .about-section { margin-bottom:32px; }
+        .about-h1 {
+            font-family:'JetBrains Mono',monospace;
+            font-size:0.65rem;
+            color:var(--accent-1);
+            text-transform:uppercase;
+            letter-spacing:0.2em;
+            margin-bottom:16px;
+            padding-bottom:8px;
+            border-bottom:1px solid var(--panel-border);
+        }
+        .about-h2 {
+            font-family:'JetBrains Mono',monospace;
+            font-size:0.72rem;
+            color:var(--accent-3);
+            text-transform:uppercase;
+            letter-spacing:0.12em;
+            margin-bottom:10px;
+        }
+        .about-p {
+            font-size:0.88rem;
+            color:var(--text-dim);
+            line-height:1.65;
+            margin-bottom:10px;
+        }
+        .about-eq {
+            font-family:'JetBrains Mono',monospace;
+            font-size:0.82rem;
+            color:var(--accent-4);
+            background:rgba(212,135,14,0.06);
+            border:1px solid var(--panel-border);
+            border-radius:6px;
+            padding:10px 14px;
+            margin:10px 0;
+            letter-spacing:0.05em;
+        }
+        .about-diagram {
+            background:rgba(0,0,0,0.3);
+            border:1px solid var(--panel-border);
+            border-radius:8px;
+            padding:16px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .about-diagram svg { max-width:100%; height:auto; }
+
         /* SVG flow diagram */
         .flow-container {
             flex:1;
@@ -511,6 +578,7 @@
             <button class="tab-btn active" data-tab="room" onclick="switchTab('room',this)">ROOM SIM</button>
             <button class="tab-btn" data-tab="ir" onclick="switchTab('ir',this)">IMPULSE RESPONSE</button>
             <button class="tab-btn" data-tab="flow" onclick="switchTab('flow',this)">SIGNAL FLOW</button>
+            <button class="tab-btn" data-tab="about" onclick="switchTab('about',this)">ABOUT</button>
         </div>
 
         <!-- Room Simulator Tab -->
@@ -534,6 +602,231 @@
                     <canvas id="edcCanvas"></canvas>
                     <div class="canvas-label">Energy Decay Curve (Schroeder Integral)</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- About Tab -->
+        <div class="tab-content" id="tabAbout">
+            <div class="about-scroll">
+
+                <div class="about-h1">Room Acoustics &amp; Reverb &mdash; Background</div>
+
+                <div class="about-grid">
+                    <div class="about-section">
+                        <div class="about-h2">Ray Tracing</div>
+                        <p class="about-p">When a sound source emits energy it radiates outward in all directions. This simulator fires a configurable number of rays from the source at evenly-spaced angles. Each ray travels at the speed of sound (343 m/s) and reflects specularly off each wall, losing energy proportional to that wall's absorption coefficient on every bounce.</p>
+                        <p class="about-p">A ray contributes to the impulse response whenever it passes within 0.5 m of the listener position. The arrival time is the total path length divided by the speed of sound; the amplitude is the product of all reflection attenuations divided by distance.</p>
+                    </div>
+                    <div class="about-diagram">
+                        <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" width="300" height="200">
+                            <rect width="300" height="200" fill="#080604"/>
+                            <!-- Room walls -->
+                            <rect x="20" y="20" width="260" height="160" fill="none" stroke="rgba(212,135,14,0.5)" stroke-width="2"/>
+                            <!-- Labels -->
+                            <text x="150" y="14" text-anchor="middle" fill="rgba(232,168,73,0.4)" font-family="JetBrains Mono,monospace" font-size="8">NORTH WALL (absorption α)</text>
+                            <!-- Source -->
+                            <circle cx="80" cy="110" r="6" fill="rgba(212,135,14,0.8)" stroke="rgba(232,168,73,1)" stroke-width="1.5"/>
+                            <text x="80" y="128" text-anchor="middle" fill="rgba(232,168,73,0.6)" font-family="JetBrains Mono,monospace" font-size="7">SRC</text>
+                            <!-- Listener -->
+                            <circle cx="210" cy="95" r="6" fill="rgba(184,98,27,0.8)" stroke="rgba(232,168,73,1)" stroke-width="1.5"/>
+                            <text x="210" y="113" text-anchor="middle" fill="rgba(232,168,73,0.6)" font-family="JetBrains Mono,monospace" font-size="7">LST</text>
+                            <!-- Direct ray -->
+                            <line x1="86" y1="107" x2="204" y2="98" stroke="rgba(232,168,73,0.9)" stroke-width="1.5" marker-end="url(#ab)"/>
+                            <text x="145" y="97" text-anchor="middle" fill="rgba(232,168,73,0.5)" font-family="JetBrains Mono,monospace" font-size="7">direct</text>
+                            <!-- 1-reflection ray -->
+                            <line x1="84" y1="104" x2="20" y2="60" stroke="rgba(212,135,14,0.5)" stroke-width="1"/>
+                            <line x1="20" y1="60" x2="206" y2="92" stroke="rgba(212,135,14,0.5)" stroke-width="1" marker-end="url(#ab)"/>
+                            <text x="100" y="58" fill="rgba(232,168,73,0.35)" font-family="JetBrains Mono,monospace" font-size="7">1st refl.</text>
+                            <!-- 2-reflection ray -->
+                            <line x1="80" y1="104" x2="100" y2="20" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                            <line x1="100" y1="20" x2="280" y2="80" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                            <line x1="280" y1="80" x2="214" y2="98" stroke="rgba(212,135,14,0.3)" stroke-width="1" marker-end="url(#ab)"/>
+                            <text x="205" y="40" fill="rgba(232,168,73,0.2)" font-family="JetBrains Mono,monospace" font-size="7">2nd refl.</text>
+                            <defs>
+                                <marker id="ab" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
+                                    <polygon points="0 0,6 2.5,0 5" fill="rgba(212,135,14,0.7)"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-section">
+                        <div class="about-h2">Impulse Response</div>
+                        <p class="about-p">The impulse response (IR) is the room's acoustic fingerprint: the output you would hear if the source emitted a perfect instantaneous click. It is built here directly from the ray arrivals — each contributing a spike at its arrival time with amplitude scaled by attenuation and distance.</p>
+                        <p class="about-p">The direct sound arrives first (positive polarity). Each subsequent wall reflection inverts polarity, so odd-numbered reflections appear below the zero line. Later arrivals cluster into the reverberant tail.</p>
+                        <div class="about-eq">RT60 &asymp; 0.161 &times; V / A &nbsp;&nbsp;(Sabine)</div>
+                        <p class="about-p">V = room volume (m³), A = total absorption area. RT60 is the time for the sound to decay by 60 dB.</p>
+                    </div>
+                    <div class="about-diagram">
+                        <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" width="300" height="160">
+                            <rect width="300" height="160" fill="#080604"/>
+                            <!-- Axes -->
+                            <line x1="30" y1="10" x2="30" y2="150" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                            <line x1="30" y1="80" x2="295" y2="80" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                            <!-- +1 / 0 / -1 labels -->
+                            <text x="26" y="18" text-anchor="end" fill="rgba(255,245,230,0.3)" font-family="JetBrains Mono,monospace" font-size="7">+1</text>
+                            <text x="26" y="83" text-anchor="end" fill="rgba(255,245,230,0.3)" font-family="JetBrains Mono,monospace" font-size="7">0</text>
+                            <text x="26" y="148" text-anchor="end" fill="rgba(255,245,230,0.3)" font-family="JetBrains Mono,monospace" font-size="7">-1</text>
+                            <!-- Time label -->
+                            <text x="285" y="148" fill="rgba(255,245,230,0.25)" font-family="JetBrains Mono,monospace" font-size="7">t</text>
+                            <!-- Direct sound (tall positive spike) -->
+                            <line x1="50" y1="80" x2="50" y2="22" stroke="rgba(232,168,73,0.9)" stroke-width="2"/>
+                            <circle cx="50" cy="22" r="2" fill="rgba(232,168,73,0.9)"/>
+                            <text x="50" y="14" text-anchor="middle" fill="rgba(232,168,73,0.5)" font-family="JetBrains Mono,monospace" font-size="6">direct</text>
+                            <!-- 1st reflection negative -->
+                            <line x1="82" y1="80" x2="82" y2="108" stroke="rgba(212,135,14,0.75)" stroke-width="1.5"/>
+                            <circle cx="82" cy="108" r="1.5" fill="rgba(212,135,14,0.75)"/>
+                            <!-- 2nd reflection positive -->
+                            <line x1="108" y1="80" x2="108" y2="52" stroke="rgba(212,135,14,0.65)" stroke-width="1.5"/>
+                            <circle cx="108" cy="52" r="1.5" fill="rgba(212,135,14,0.65)"/>
+                            <!-- 3rd neg -->
+                            <line x1="130" y1="80" x2="130" y2="100" stroke="rgba(212,135,14,0.55)" stroke-width="1.5"/>
+                            <!-- Later arrivals decaying -->
+                            <line x1="150" y1="80" x2="150" y2="62" stroke="rgba(212,135,14,0.45)" stroke-width="1"/>
+                            <line x1="163" y1="80" x2="163" y2="93" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                            <line x1="175" y1="80" x2="175" y2="70" stroke="rgba(212,135,14,0.35)" stroke-width="1"/>
+                            <line x1="186" y1="80" x2="186" y2="88" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                            <line x1="196" y1="80" x2="196" y2="74" stroke="rgba(212,135,14,0.28)" stroke-width="1"/>
+                            <line x1="205" y1="80" x2="205" y2="86" stroke="rgba(212,135,14,0.25)" stroke-width="1"/>
+                            <line x1="214" y1="80" x2="214" y2="75" stroke="rgba(212,135,14,0.22)" stroke-width="1"/>
+                            <line x1="222" y1="80" x2="222" y2="84" stroke="rgba(212,135,14,0.2)" stroke-width="1"/>
+                            <line x1="230" y1="80" x2="230" y2="77" stroke="rgba(212,135,14,0.18)" stroke-width="1"/>
+                            <line x1="237" y1="80" x2="237" y2="83" stroke="rgba(212,135,14,0.15)" stroke-width="1"/>
+                            <line x1="244" y1="80" x2="244" y2="78" stroke="rgba(212,135,14,0.13)" stroke-width="1"/>
+                            <line x1="250" y1="80" x2="250" y2="82" stroke="rgba(212,135,14,0.11)" stroke-width="1"/>
+                            <!-- Decay envelope label -->
+                            <text x="160" y="38" fill="rgba(232,168,73,0.3)" font-family="JetBrains Mono,monospace" font-size="7">reverberant tail</text>
+                            <!-- RT60 bracket -->
+                            <line x1="50" y1="152" x2="255" y2="152" stroke="rgba(212,135,14,0.2)" stroke-width="1"/>
+                            <line x1="50" y1="149" x2="50" y2="155" stroke="rgba(212,135,14,0.2)" stroke-width="1"/>
+                            <line x1="255" y1="149" x2="255" y2="155" stroke="rgba(212,135,14,0.2)" stroke-width="1"/>
+                            <text x="152" y="160" text-anchor="middle" fill="rgba(232,168,73,0.25)" font-family="JetBrains Mono,monospace" font-size="6">RT60</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <div class="about-h2">Schroeder Reverberator (1962)</div>
+                    <p class="about-p">Manfred Schroeder's landmark 1962 paper <em>"Natural Sounding Artificial Reverberation"</em> showed that a convincing reverb tail could be synthesised from a bank of parallel feedback comb filters followed by a cascade of allpass filters. The comb filters create the dense echo build-up; the allpass filters diffuse it without colouring the frequency response.</p>
+                    <p class="about-p">This implementation uses four parallel comb filters summed and fed through two series allpass sections, matching Schroeder's original topology.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div>
+                        <div class="about-h2">Feedback Comb Filter</div>
+                        <p class="about-p">A delay line of length D samples with its output fed back through a gain g. Each pass through the loop attenuates the signal by g and delays it by D samples, producing a series of equally-spaced echoes with exponentially decaying amplitude.</p>
+                        <div class="about-eq">y[n] = x[n&minus;D] + g &middot; y[n&minus;D]</div>
+                        <p class="about-p">The loop gain g controls the decay rate. RT60 is approximately &minus;3D / log₁₀(g) seconds.</p>
+                        <div class="about-diagram" style="margin-top:12px">
+                            <svg viewBox="0 0 340 110" xmlns="http://www.w3.org/2000/svg" width="340" height="110">
+                                <rect width="340" height="110" fill="#080604"/>
+                                <defs>
+                                    <marker id="aw" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                                        <polygon points="0 0,6 2.5,0 5" fill="rgba(212,135,14,0.7)"/>
+                                    </marker>
+                                </defs>
+                                <!-- x[n] label -->
+                                <text x="8" y="47" fill="rgba(255,245,230,0.5)" font-family="JetBrains Mono,monospace" font-size="9">x[n]</text>
+                                <!-- arrow into delay -->
+                                <line x1="38" y1="43" x2="70" y2="43" stroke="rgba(212,135,14,0.5)" stroke-width="1" marker-end="url(#aw)"/>
+                                <!-- Delay box -->
+                                <rect x="72" y="28" width="80" height="30" rx="5" fill="rgba(212,135,14,0.1)" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                                <text x="112" y="41" text-anchor="middle" fill="rgba(232,168,73,0.8)" font-family="JetBrains Mono,monospace" font-size="9">DELAY</text>
+                                <text x="112" y="52" text-anchor="middle" fill="rgba(232,168,73,0.4)" font-family="JetBrains Mono,monospace" font-size="7">D samples</text>
+                                <!-- arrow to output -->
+                                <line x1="152" y1="43" x2="285" y2="43" stroke="rgba(212,135,14,0.5)" stroke-width="1" marker-end="url(#aw)"/>
+                                <!-- y[n] label -->
+                                <text x="290" y="47" fill="rgba(255,245,230,0.5)" font-family="JetBrains Mono,monospace" font-size="9">y[n]</text>
+                                <!-- feedback tap from output -->
+                                <line x1="260" y1="43" x2="260" y2="85" stroke="rgba(212,135,14,0.35)" stroke-width="1"/>
+                                <line x1="260" y1="85" x2="196" y2="85" stroke="rgba(212,135,14,0.35)" stroke-width="1"/>
+                                <!-- gain box -->
+                                <rect x="132" y="72" width="60" height="26" rx="4" fill="rgba(184,98,27,0.1)" stroke="rgba(184,98,27,0.4)" stroke-width="1"/>
+                                <text x="162" y="89" text-anchor="middle" fill="rgba(232,168,73,0.7)" font-family="JetBrains Mono,monospace" font-size="9">× g</text>
+                                <!-- from gain box back to delay input -->
+                                <line x1="132" y1="85" x2="86" y2="85" stroke="rgba(212,135,14,0.35)" stroke-width="1"/>
+                                <line x1="86" y1="85" x2="86" y2="58" stroke="rgba(212,135,14,0.35)" stroke-width="1" marker-end="url(#aw)"/>
+                                <!-- fb label -->
+                                <text x="218" y="96" fill="rgba(232,168,73,0.25)" font-family="JetBrains Mono,monospace" font-size="7">feedback</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="about-h2">Allpass Filter</div>
+                        <p class="about-p">The allpass section has unity gain at every frequency — it does not colour the sound. It introduces frequency-dependent phase shifts that smear the echoes in time, increasing perceptual density without changing the spectral envelope.</p>
+                        <div class="about-eq">y[n] = &minus;g&middot;x[n] + x[n&minus;D] + g&middot;y[n&minus;D]</div>
+                        <p class="about-p">|H(e<sup>jω</sup>)| = 1 for all ω. Two stages in series raise the echo density further.</p>
+                        <div class="about-diagram" style="margin-top:12px">
+                            <svg viewBox="0 0 340 140" xmlns="http://www.w3.org/2000/svg" width="340" height="140">
+                                <rect width="340" height="140" fill="#080604"/>
+                                <defs>
+                                    <marker id="av" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto">
+                                        <polygon points="0 0,6 2.5,0 5" fill="rgba(212,135,14,0.7)"/>
+                                    </marker>
+                                </defs>
+                                <!-- x[n] -->
+                                <text x="6" y="53" fill="rgba(255,245,230,0.5)" font-family="JetBrains Mono,monospace" font-size="9">x[n]</text>
+                                <!-- junction dot -->
+                                <circle cx="50" cy="49" r="3" fill="rgba(212,135,14,0.7)"/>
+                                <!-- top path: x → [-g] → sum -->
+                                <line x1="38" y1="49" x2="55" y2="49" stroke="rgba(212,135,14,0.5)" stroke-width="1"/>
+                                <line x1="50" y1="49" x2="50" y2="28" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                                <line x1="50" y1="28" x2="100" y2="28" stroke="rgba(212,135,14,0.4)" stroke-width="1" marker-end="url(#av)"/>
+                                <!-- [-g] box top -->
+                                <rect x="102" y="16" width="52" height="24" rx="4" fill="rgba(139,105,20,0.12)" stroke="rgba(139,105,20,0.4)" stroke-width="1"/>
+                                <text x="128" y="32" text-anchor="middle" fill="rgba(232,168,73,0.7)" font-family="JetBrains Mono,monospace" font-size="9">×−g</text>
+                                <!-- bottom path: x → delay → sum -->
+                                <line x1="50" y1="49" x2="50" y2="69" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                                <line x1="50" y1="69" x2="100" y2="69" stroke="rgba(212,135,14,0.4)" stroke-width="1" marker-end="url(#av)"/>
+                                <!-- delay box -->
+                                <rect x="102" y="57" width="52" height="24" rx="4" fill="rgba(212,135,14,0.1)" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                                <text x="128" y="68" text-anchor="middle" fill="rgba(232,168,73,0.8)" font-family="JetBrains Mono,monospace" font-size="8">DELAY</text>
+                                <text x="128" y="77" text-anchor="middle" fill="rgba(232,168,73,0.4)" font-family="JetBrains Mono,monospace" font-size="6">D</text>
+                                <!-- both to summer -->
+                                <line x1="154" y1="28" x2="200" y2="28" stroke="rgba(212,135,14,0.4)" stroke-width="1" marker-end="url(#av)"/>
+                                <line x1="154" y1="69" x2="200" y2="69" stroke="rgba(212,135,14,0.4)" stroke-width="1" marker-end="url(#av)"/>
+                                <!-- summer -->
+                                <circle cx="214" cy="49" r="14" fill="none" stroke="rgba(212,135,14,0.5)" stroke-width="1.5"/>
+                                <text x="214" y="54" text-anchor="middle" fill="rgba(232,168,73,0.8)" font-family="JetBrains Mono,monospace" font-size="13">+</text>
+                                <line x1="200" y1="28" x2="205" y2="40" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                                <line x1="200" y1="69" x2="205" y2="58" stroke="rgba(212,135,14,0.4)" stroke-width="1"/>
+                                <!-- summer → y[n] -->
+                                <line x1="228" y1="49" x2="310" y2="49" stroke="rgba(212,135,14,0.5)" stroke-width="1" marker-end="url(#av)"/>
+                                <text x="315" y="53" fill="rgba(255,245,230,0.5)" font-family="JetBrains Mono,monospace" font-size="9">y[n]</text>
+                                <!-- feedback: summer out → [×g] → delay in -->
+                                <line x1="250" y1="49" x2="250" y2="112" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                                <line x1="250" y1="112" x2="175" y2="112" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                                <!-- [×g] feedback gain -->
+                                <rect x="175" y="100" width="52" height="24" rx="4" fill="rgba(184,98,27,0.1)" stroke="rgba(184,98,27,0.35)" stroke-width="1"/>
+                                <text x="201" y="116" text-anchor="middle" fill="rgba(232,168,73,0.6)" font-family="JetBrains Mono,monospace" font-size="9">× g</text>
+                                <line x1="175" y1="112" x2="128" y2="112" stroke="rgba(212,135,14,0.3)" stroke-width="1"/>
+                                <line x1="128" y1="112" x2="128" y2="81" stroke="rgba(212,135,14,0.3)" stroke-width="1" marker-end="url(#av)"/>
+                                <text x="165" y="128" fill="rgba(232,168,73,0.2)" font-family="JetBrains Mono,monospace" font-size="7">feedback</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <div class="about-h2">Parameter Guide</div>
+                    <div class="about-grid-3">
+                        <div>
+                            <div class="about-eq">Comb delay D</div>
+                            <p class="about-p">Sets the fundamental echo spacing. Four different delays (typically prime multiples) spread the resonances spectrally, avoiding metallic colouration.</p>
+                        </div>
+                        <div>
+                            <div class="about-eq">Comb gain g</div>
+                            <p class="about-p">Controls decay rate per comb. Higher g = longer tail. Should remain below 1.0 for stability. Values around 0.8–0.9 give natural-sounding RT60s.</p>
+                        </div>
+                        <div>
+                            <div class="about-eq">Allpass g</div>
+                            <p class="about-p">Controls diffusion. Higher values spread the echoes more widely in time. Schroeder recommended g ≈ 0.7 as a perceptual optimum.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
