@@ -440,8 +440,7 @@
         </div>
     </div>
     <div class="transport">
-        <button id="btnInit" onclick="initAudio()">INIT AUDIO</button>
-        <button id="btnPlay" onclick="playTestSignal()">PLAY</button>
+<button id="btnPlay" onclick="playTestSignal()">PLAY</button>
         <button id="btnStop" onclick="stopAudio()">STOP</button>
         <button id="btnAnimate" onclick="toggleRayAnimation()">ANIMATE RAYS</button>
     </div>
@@ -717,8 +716,7 @@ function initAudio() {
     wetGain.connect(masterGain);
 
     buildReverb();
-    document.getElementById('btnInit').classList.add('active');
-    computeRays();
+computeRays();
     updateMetrics();
 }
 
